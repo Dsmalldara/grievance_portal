@@ -196,63 +196,34 @@ export default function HistoryPage() {
                       <p className="text-gray-500">No grievances have been submitted yet.</p>
                     </div>
                   ) : (
-                    <div className="overflow-hidden rounded-lg border">
-                      <div className="overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
-                            <tr className="bg-gray-50 border-b">
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Submitter
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Grievance
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Mood
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Severity
-                              </th>
-                              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Date
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {allGrievances.map((grievance) => (
-                              <tr key={grievance.id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center">
-                                    <User className="h-4 w-4 text-gray-400 mr-2" />
-                                    <div className="text-sm font-medium text-gray-900">{grievance.user.name}</div>
-                                  </div>
-                                  <div className="text-xs text-gray-500">{grievance.user.email}</div>
-                                </td>
-                                <td className="px-6 py-4">
-                                  <div className="text-sm font-medium text-gray-900">{grievance.title}</div>
-                                  <div className="text-sm text-gray-500 line-clamp-2">{grievance.content}</div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span className="text-2xl">
-                                    {moodEmojis[grievance.mood as keyof typeof moodEmojis]}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <Badge className={severityColors[grievance.severity as keyof typeof severityColors]}>
-                                    {grievance.severity === "kitkat" && "KitKat Fix"}
-                                    {grievance.severity === "medium" && "Need Hug"}
-                                    {grievance.severity === "high" && "Day Ruined"}
-                                    {grievance.severity === "extreme" && "Never Recover"}
-                                  </Badge>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  {formatDate(grievance.createdAt)}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                    <div className="space-y-4">
+                      {allGrievances.map((grievance) => (
+                        <div key={grievance.id} className="bg-white p-4 rounded-lg border">
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-medium text-lg">{grievance.title}</h3>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-2xl">{moodEmojis[grievance.mood as keyof typeof moodEmojis]}</span>
+                              <Badge className={severityColors[grievance.severity as keyof typeof severityColors]}>
+                                {grievance.severity === "kitkat" && "KitKat Fix"}
+                                {grievance.severity === "medium" && "Need Hug"}
+                                {grievance.severity === "high" && "Day Ruined"}
+                                {grievance.severity === "extreme" && "Never Recover"}
+                              </Badge>
+                            </div>
+                          </div>
+                          <p className="text-gray-700 mb-3">{grievance.content}</p>
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center text-sm text-gray-500">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              {formatDate(grievance.createdAt)}
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <User className="h-4 w-4 mr-1" />
+                              <span className="font-medium">by {grievance.user.name}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </CardContent>
