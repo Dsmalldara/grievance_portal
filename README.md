@@ -28,5 +28,5 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 Installation
 Clone the repository:
-git clone https://github.com/yourusername/grievance-portal.git
-cd grievance-portal
+git clone https://github.com/Dsmalldara/grievance_portal
+cd grievance_portal
