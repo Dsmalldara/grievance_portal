@@ -1,10 +1,13 @@
 import { db } from "@/lib/db"
 import { users, userSessions, type User } from "@/lib/db/schema"
-
 import { eq, and } from "drizzle-orm"
 import { cookies } from "next/headers"
-import { randomUUID as uuidv4 } from "crypto"
+import { v4 as uuidv4 } from "uuid"
 import bcrypt from "bcryptjs"
+
+// Owner email for admin access
+const OWNER_EMAIL = "topedarasimi5@gmail.com"
+
 // Get current user from session
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -54,6 +57,9 @@ export async function registerUser(email: string, password: string, name: string
     // Hash password
     const passwordHash = await bcrypt.hash(password, 10)
 
+    // Check if this is the owner email to grant admin privileges
+    const isAdmin = email.toLowerCase() === OWNER_EMAIL.toLowerCase()
+
     // Insert new user
     const [user] = await db
       .insert(users)
@@ -61,6 +67,7 @@ export async function registerUser(email: string, password: string, name: string
         email,
         passwordHash,
         name,
+        isAdmin,
       })
       .returning()
 

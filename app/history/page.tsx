@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
-"use client"
+/* eslint-disable react/no-unescaped-entities */"use client"
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Heart, ArrowLeft, User, Calendar } from "lucide-react"
 import ProtectedRoute from "@/components/protected-route"
 import LogoutButton from "@/components/logout-button"
-
+import { useAuth } from "@/components/auth-provider"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -35,6 +34,13 @@ const moodEmojis = {
   disappointed: "😞",
 }
 
+const moodLabels = {
+  sad: "Sad",
+  angry: "Angry",
+  annoyed: "Annoyed",
+  disappointed: "Disappointed",
+}
+
 const severityColors = {
   kitkat: "bg-green-100 text-green-800",
   medium: "bg-yellow-100 text-yellow-800",
@@ -46,7 +52,7 @@ export default function HistoryPage() {
   const [allGrievances, setAllGrievances] = useState<Grievance[]>([])
   const [myGrievances, setMyGrievances] = useState<Grievance[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
+  const { user } = useAuth()
   const { toast } = useToast()
 
   useEffect(() => {
@@ -132,6 +138,17 @@ export default function HistoryPage() {
             </div>
           </div>
 
+          {user?.isAdmin && (
+            <div className="mb-4">
+              <Button asChild variant="outline" className="bg-white/80 hover:bg-white">
+                <Link href="/admin/users">
+                  <User className="h-4 w-4 mr-2" />
+                  Manage Users
+                </Link>
+              </Button>
+            </div>
+          )}
+
           <Tabs defaultValue="my-grievances" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="my-grievances">Your Grievances</TabsTrigger>
@@ -162,7 +179,14 @@ export default function HistoryPage() {
                           <div className="flex justify-between items-start mb-2">
                             <h3 className="font-medium text-lg">{grievance.title}</h3>
                             <div className="flex items-center space-x-2">
-                              <span className="text-2xl">{moodEmojis[grievance.mood as keyof typeof moodEmojis]}</span>
+                              <div className="flex items-center">
+                                <span className="text-2xl mr-1">
+                                  {moodEmojis[grievance.mood as keyof typeof moodEmojis]}
+                                </span>
+                                <span className="text-sm text-gray-600">
+                                  {moodLabels[grievance.mood as keyof typeof moodLabels]}
+                                </span>
+                              </div>
                               <Badge className={severityColors[grievance.severity as keyof typeof severityColors]}>
                                 {grievance.severity === "kitkat" && "KitKat Fix"}
                                 {grievance.severity === "medium" && "Need Hug"}
@@ -202,7 +226,14 @@ export default function HistoryPage() {
                           <div className="flex justify-between items-start mb-2">
                             <h3 className="font-medium text-lg">{grievance.title}</h3>
                             <div className="flex items-center space-x-2">
-                              <span className="text-2xl">{moodEmojis[grievance.mood as keyof typeof moodEmojis]}</span>
+                              <div className="flex items-center">
+                                <span className="text-2xl mr-1">
+                                  {moodEmojis[grievance.mood as keyof typeof moodEmojis]}
+                                </span>
+                                <span className="text-sm text-gray-600">
+                                  {moodLabels[grievance.mood as keyof typeof moodLabels]}
+                                </span>
+                              </div>
                               <Badge className={severityColors[grievance.severity as keyof typeof severityColors]}>
                                 {grievance.severity === "kitkat" && "KitKat Fix"}
                                 {grievance.severity === "medium" && "Need Hug"}
