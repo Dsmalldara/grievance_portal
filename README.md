@@ -1,4 +1,4 @@
-ehaj's Grievance Portal
+Tes's Grievance Portal
 A web application built with Next.js and Drizzle ORM that allows users to submit and track grievances.
 
 Next.js
